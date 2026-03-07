@@ -38,6 +38,6 @@ authRouter.post("/session/refresh", AuthController.refreshSession);
  * DELETE /api/v1/auth/session
  * Destroy session (clear cookie)
  */
-authRouter.delete("/session", authMiddleware, AuthController.destroySession);
+authRouter.delete("/session", AuthController.destroySession);
 
 export default authRouter;

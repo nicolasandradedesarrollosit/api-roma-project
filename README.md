@@ -79,8 +79,34 @@ chmod +x .husky/pre-commit .husky/pre-push
 See `.env.example` for all available configuration options.
 
 **Required for development:**
-- `MONGODB_URI` - MongoDB connection string
+- `MONGO_URI` - MongoDB connection string
 - `JWT_SECRET` - JWT signing secret (min 32 chars)
+
+### Render Deployment
+
+Use these settings when deploying this API on Render:
+
+```bash
+Build Command: npm install && npm run build
+Start Command: npm start
+```
+
+Recommended environment variables on Render:
+
+- `NODE_ENV=production`
+- `MONGO_URI=<your-mongodb-connection-string>`
+- `JWT_SECRET=<your-jwt-secret>`
+- `JWT_EXPIRES_IN=14d`
+- `ALLOWED_ORIGIN=<your-frontend-url>`
+- `FIREBASE_PROJECT_ID=<your-firebase-project-id>`
+- `FIREBASE_PRIVATE_KEY=<your-firebase-private-key-with-\\n>`
+- `FIREBASE_CLIENT_EMAIL=<your-firebase-client-email>`
+
+Health check path:
+
+```bash
+/health
+```
 
 ## Technologies Used
 
@@ -125,7 +151,7 @@ mongo
 **MongoDB Atlas:**
 Use connection string in `.env`:
 ```
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/dbname
+MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/dbname
 ```
 
 ## Error Handling

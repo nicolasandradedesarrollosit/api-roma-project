@@ -67,11 +67,7 @@ export class AuthService {
   /**
    * Find or create a user from a decoded Firebase token
    */
-  async findOrCreateByFirebase(decoded: {
-    uid: string;
-    email?: string;
-    name?: string;
-  }) {
+  async findOrCreateByFirebase(decoded: { uid: string; email?: string; name?: string }) {
     const existing = await AuthUser.findOne({ firebaseUid: decoded.uid });
     if (existing) return existing;
 
