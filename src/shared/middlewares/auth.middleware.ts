@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 import { admin } from "../../config/firebase";
 import { AuthUser } from "../../modules/auth/auth.models";
-import { UserRole, type IAuthPayload } from "../types";
+import { type IAuthPayload, UserRole } from "../types";
 
 declare global {
   namespace Express {

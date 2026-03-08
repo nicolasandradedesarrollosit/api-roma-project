@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { OrderStatus, type IOrder } from "./orders.types";
+import { type IOrder, OrderStatus } from "./orders.types";
 
 const orderItemSchema = new Schema(
   {

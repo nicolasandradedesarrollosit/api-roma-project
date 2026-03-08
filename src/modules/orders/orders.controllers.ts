@@ -1,4 +1,3 @@
-import { plainToInstance } from "class-transformer";
 import type { Request, Response } from "express";
 import { OrderQueryDto } from "./orders.dto";
 import { OrderService } from "./orders.service";
@@ -8,7 +7,7 @@ const orderService = new OrderService();
 export class OrderController {
   static async getAll(req: Request, res: Response): Promise<void> {
     try {
-      const query = plainToInstance(OrderQueryDto, req.query);
+      const query = req.query as unknown as OrderQueryDto;
       const result = await orderService.findAll(query);
       res.status(200).json({ message: "Orders retrieved", data: result });
     } catch (error: any) {

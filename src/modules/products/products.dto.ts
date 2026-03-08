@@ -1,5 +1,15 @@
-import { IsArray, IsBoolean, IsEnum, IsNumber, IsOptional, IsString, MaxLength, Min, ValidateNested } from "class-validator";
 import { Type } from "class-transformer";
+import {
+  IsArray,
+  IsBoolean,
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+  MaxLength,
+  Min,
+  ValidateNested,
+} from "class-validator";
 import { ProductCategory, ProductMaterial } from "./products.types";
 
 class DimensionsDto {

@@ -1,5 +1,3 @@
-import { plainToInstance } from "class-transformer";
-import { validate } from "class-validator";
 import type { Request, Response } from "express";
 import { CreateProductDto, ProductQueryDto, UpdateProductDto } from "./products.dto";
 import { ProductService } from "./products.service";
@@ -9,7 +7,7 @@ const productService = new ProductService();
 export class ProductController {
   static async getAll(req: Request, res: Response): Promise<void> {
     try {
-      const query = plainToInstance(ProductQueryDto, req.query);
+      const query = req.query as unknown as ProductQueryDto;
       const result = await productService.findAll(query);
       res.status(200).json({ message: "Products retrieved", data: result });
     } catch (error: any) {
@@ -32,12 +30,7 @@ export class ProductController {
 
   static async create(req: Request, res: Response): Promise<void> {
     try {
-      const dto = plainToInstance(CreateProductDto, req.body);
-      const errors = await validate(dto);
-      if (errors.length > 0) {
-        res.status(400).json({ message: "Validation failed", errors });
-        return;
-      }
+      const dto = req.body as CreateProductDto;
       const product = await productService.create(dto);
       res.status(201).json({ message: "Product created", data: product });
     } catch (error: any) {
@@ -47,12 +40,7 @@ export class ProductController {
 
   static async update(req: Request, res: Response): Promise<void> {
     try {
-      const dto = plainToInstance(UpdateProductDto, req.body);
-      const errors = await validate(dto, { skipMissingProperties: true });
-      if (errors.length > 0) {
-        res.status(400).json({ message: "Validation failed", errors });
-        return;
-      }
+      const dto = req.body as UpdateProductDto;
       const product = await productService.update(req.params.id as string, dto);
       if (!product) {
         res.status(404).json({ message: "Product not found" });

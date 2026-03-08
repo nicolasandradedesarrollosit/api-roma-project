@@ -1,5 +1,5 @@
-import { IsEnum, IsNumber, IsOptional, IsString } from "class-validator";
 import { Type } from "class-transformer";
+import { IsEnum, IsNumber, IsOptional, IsString } from "class-validator";
 import { UserRole } from "../../shared/types";
 
 export class UserQueryDto {
