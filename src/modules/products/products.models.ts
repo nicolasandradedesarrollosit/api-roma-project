@@ -1,6 +1,13 @@
 import mongoose, { Schema } from "mongoose";
 import { type IProduct, ProductCategory, ProductMaterial } from "./products.types";
 
+function buildSlug(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
 const productSchema = new Schema<IProduct>(
   {
     name: { type: String, required: true, trim: true },
@@ -34,12 +41,26 @@ const productSchema = new Schema<IProduct>(
 productSchema.index({ category: 1 });
 productSchema.index({ isActive: 1 });
 
+// Runs on Model.save() — handles create and save-based updates
 productSchema.pre("save", function () {
   if (this.isModified("name")) {
-    this.slug = this.name
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/(^-|-$)/g, "");
+    this.slug = buildSlug(this.name);
+  }
+});
+
+// Runs on findByIdAndUpdate / findOneAndUpdate — bypasses pre("save")
+productSchema.pre("findOneAndUpdate", function () {
+  const update = this.getUpdate() as Record<string, any> | null;
+  if (!update) return;
+
+  const name = update.name ?? update.$set?.name;
+  if (!name) return;
+
+  const slug = buildSlug(name);
+  if (update.$set) {
+    update.$set.slug = slug;
+  } else {
+    update.slug = slug;
   }
 });
 

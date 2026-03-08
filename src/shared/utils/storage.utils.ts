@@ -15,7 +15,7 @@ export class StorageUtils {
     path: string,
     contentType: string,
   ): Promise<string> {
-    const client = this.getClient();
+    const client = StorageUtils.getClient();
 
     const { error } = await client.storage.from(bucket).upload(path, buffer, {
       contentType,
@@ -29,13 +29,13 @@ export class StorageUtils {
   }
 
   static async deleteFile(bucket: string, path: string): Promise<void> {
-    const client = this.getClient();
+    const client = StorageUtils.getClient();
     const { error } = await client.storage.from(bucket).remove([path]);
     if (error) throw new Error(`Delete failed: ${error.message}`);
   }
 
   static getPublicUrl(bucket: string, path: string): string {
-    const client = this.getClient();
+    const client = StorageUtils.getClient();
     const { data } = client.storage.from(bucket).getPublicUrl(path);
     return data.publicUrl;
   }

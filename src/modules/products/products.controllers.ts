@@ -1,8 +1,13 @@
 import type { Request, Response } from "express";
-import { CreateProductDto, ProductQueryDto, UpdateProductDto } from "./products.dto";
+import mongoose from "mongoose";
+import type { CreateProductDto, ProductQueryDto, UpdateProductDto } from "./products.dto";
 import { ProductService } from "./products.service";
 
 const productService = new ProductService();
+
+function isValidObjectId(id: string): boolean {
+  return mongoose.Types.ObjectId.isValid(id);
+}
 
 export class ProductController {
   static async getAll(req: Request, res: Response): Promise<void> {
@@ -17,7 +22,12 @@ export class ProductController {
 
   static async getById(req: Request, res: Response): Promise<void> {
     try {
-      const product = await productService.findById(req.params.id as string);
+      const id = String(req.params.id);
+      if (!isValidObjectId(id)) {
+        res.status(404).json({ message: "Product not found" });
+        return;
+      }
+      const product = await productService.findById(id);
       if (!product) {
         res.status(404).json({ message: "Product not found" });
         return;
@@ -40,8 +50,13 @@ export class ProductController {
 
   static async update(req: Request, res: Response): Promise<void> {
     try {
+      const id = String(req.params.id);
+      if (!isValidObjectId(id)) {
+        res.status(404).json({ message: "Product not found" });
+        return;
+      }
       const dto = req.body as UpdateProductDto;
-      const product = await productService.update(req.params.id as string, dto);
+      const product = await productService.update(id, dto);
       if (!product) {
         res.status(404).json({ message: "Product not found" });
         return;
@@ -54,7 +69,12 @@ export class ProductController {
 
   static async delete(req: Request, res: Response): Promise<void> {
     try {
-      const product = await productService.softDelete(req.params.id as string);
+      const id = String(req.params.id);
+      if (!isValidObjectId(id)) {
+        res.status(404).json({ message: "Product not found" });
+        return;
+      }
+      const product = await productService.softDelete(id);
       if (!product) {
         res.status(404).json({ message: "Product not found" });
         return;

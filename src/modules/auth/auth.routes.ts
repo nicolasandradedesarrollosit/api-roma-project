@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { validateDto } from "../../shared/middlewares";
-import { AuthLoginDto, AuthRegisterDto, CreateSessionDto } from "./auth.dto";
-import { AuthController } from "./auth.controllers";
 import { authMiddleware } from "../../shared/middlewares/auth.middleware";
+import { AuthController } from "./auth.controllers";
+import { AuthLoginDto, AuthRegisterDto, CreateSessionDto } from "./auth.dto";
 
 const authRouter = Router();
 

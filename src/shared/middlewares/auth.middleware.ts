@@ -23,7 +23,7 @@ async function extractAndVerifyToken(req: Request): Promise<IAuthPayload | null>
   const dbUser = await AuthUser.findOne({ firebaseUid: decoded.uid });
   const role = dbUser?.role ?? UserRole.USER;
 
-  return { userId: decoded.uid, email: decoded.email ?? "", role };
+  return { firebaseUid: decoded.uid, email: decoded.email ?? "", role };
 }
 
 export const authMiddleware = async (

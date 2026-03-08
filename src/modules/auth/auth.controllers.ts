@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { AuthLoginDto, AuthRegisterDto, CreateSessionDto } from "./auth.dto";
+import type { AuthLoginDto, AuthRegisterDto, CreateSessionDto } from "./auth.dto";
 import { AuthService } from "./auth.service";
 
 const authService = new AuthService();

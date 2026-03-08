@@ -1,8 +1,13 @@
 import type { Request, Response } from "express";
-import { OrderQueryDto } from "./orders.dto";
+import mongoose from "mongoose";
+import type { OrderQueryDto } from "./orders.dto";
 import { OrderService } from "./orders.service";
 
 const orderService = new OrderService();
+
+function isValidObjectId(id: string): boolean {
+  return mongoose.Types.ObjectId.isValid(id);
+}
 
 export class OrderController {
   static async getAll(req: Request, res: Response): Promise<void> {
@@ -17,7 +22,12 @@ export class OrderController {
 
   static async getById(req: Request, res: Response): Promise<void> {
     try {
-      const order = await orderService.findById(req.params.id as string);
+      const id = String(req.params.id);
+      if (!isValidObjectId(id)) {
+        res.status(404).json({ message: "Order not found" });
+        return;
+      }
+      const order = await orderService.findById(id);
       if (!order) {
         res.status(404).json({ message: "Order not found" });
         return;

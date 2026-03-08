@@ -2,7 +2,7 @@ import mongoose, { type Document, Schema } from "mongoose";
 
 export interface IAuthUser extends Document {
   email: string;
-  firebaseUid: string;
+  firebaseUid?: string;
   firstName: string;
   lastName: string;
   password?: string;
@@ -21,9 +21,12 @@ const authUserSchema = new Schema<IAuthUser>(
       lowercase: true,
       trim: true,
     },
+    // Optional: only present for Firebase-authenticated users.
+    // sparse allows multiple documents with no firebaseUid while still
+    // enforcing uniqueness among those that do have one.
     firebaseUid: {
       type: String,
-      required: true,
+      sparse: true,
       unique: true,
     },
     firstName: {

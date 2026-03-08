@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import type { IAuthPayload } from "../types";
+import type { IJwtPayload } from "../types";
 
 export class JwtUtils {
   private static readonly secret: string =
@@ -10,16 +10,16 @@ export class JwtUtils {
   /**
    * Generate JWT token
    */
-  static generateToken(payload: IAuthPayload): string {
+  static generateToken(payload: IJwtPayload): string {
     return jwt.sign(payload, JwtUtils.secret, { expiresIn: JwtUtils.expiresIn } as any);
   }
 
   /**
    * Verify JWT token
    */
-  static verifyToken(token: string): IAuthPayload | null {
+  static verifyToken(token: string): IJwtPayload | null {
     try {
-      return jwt.verify(token, JwtUtils.secret) as IAuthPayload;
+      return jwt.verify(token, JwtUtils.secret) as IJwtPayload;
     } catch (_error) {
       return null;
     }
@@ -28,9 +28,9 @@ export class JwtUtils {
   /**
    * Decode token without verification
    */
-  static decodeToken(token: string): IAuthPayload | null {
+  static decodeToken(token: string): IJwtPayload | null {
     try {
-      return jwt.decode(token) as IAuthPayload | null;
+      return jwt.decode(token) as IJwtPayload | null;
     } catch (_error) {
       return null;
     }

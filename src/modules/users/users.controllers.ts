@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { UserQueryDto } from "./users.dto";
+import type { UserQueryDto } from "./users.dto";
 import { UserService } from "./users.service";
 
 const userService = new UserService();
