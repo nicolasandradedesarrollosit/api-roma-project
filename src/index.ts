@@ -4,6 +4,10 @@ import cors from "cors";
 import express, { type Express } from "express";
 import { connectDatabase } from "./config/database";
 import authRouter from "./modules/auth/auth.routes";
+import insightsRouter from "./modules/insights/insights.routes";
+import ordersRouter from "./modules/orders/orders.routes";
+import productsRouter from "./modules/products/products.routes";
+import usersRouter from "./modules/users/users.routes";
 
 const app: Express = express();
 const PORT = process.env.PORT || 3001;
@@ -21,6 +25,10 @@ app.get("/health", (_req, res) => {
 
 // Routes
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/products", productsRouter);
+app.use("/api/v1/orders", ordersRouter);
+app.use("/api/v1/users", usersRouter);
+app.use("/api/v1/insights", insightsRouter);
 
 // Error handling middleware
 app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
