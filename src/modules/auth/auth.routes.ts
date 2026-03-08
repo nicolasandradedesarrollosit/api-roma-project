@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { authMiddleware } from "../../shared/middlewares/auth.middleware";
 import { AuthController } from "./auth.controllers";
 
 const authRouter = Router();
@@ -15,12 +14,6 @@ authRouter.post("/register", AuthController.register);
  * Login user
  */
 authRouter.post("/login", AuthController.login);
-
-/**
- * GET /api/v1/auth/me
- * Get current user (requires authentication)
- */
-authRouter.get("/me", authMiddleware, AuthController.getCurrentUser);
 
 /**
  * POST /api/v1/auth/session

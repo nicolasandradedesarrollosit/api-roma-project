@@ -56,29 +56,6 @@ export class AuthController {
   }
 
   /**
-   * Get current user endpoint
-   */
-  static async getCurrentUser(req: Request, res: Response): Promise<void> {
-    try {
-      if (!req.user) {
-        res.status(401).json({ message: "Unauthorized" });
-        return;
-      }
-
-      res.status(200).json({
-        message: "User retrieved",
-        data: {
-          uid: req.user.userId,
-          email: req.user.email,
-          role: req.user.role,
-        },
-      });
-    } catch (error: any) {
-      res.status(500).json({ message: error.message });
-    }
-  }
-
-  /**
    * Create session — verifies Firebase ID token and sets httpOnly cookie
    */
   static async createSession(req: Request, res: Response): Promise<void> {
@@ -96,7 +73,7 @@ export class AuthController {
       res.cookie("session", dto.idToken, SESSION_COOKIE_OPTIONS);
       res.status(200).json({
         message: "Session created",
-        data: { uid: decoded.uid, email: decoded.email, userId: user._id },
+        data: { uid: decoded.uid, email: decoded.email, userId: user._id, role: user.role },
       });
     } catch (_error) {
       res.status(401).json({ message: "Invalid token" });
@@ -117,10 +94,11 @@ export class AuthController {
       }
 
       const decoded = await authService.verifyFirebaseToken(dto.idToken);
+      const user = await authService.findOrCreateByFirebase(decoded);
       res.cookie("session", dto.idToken, SESSION_COOKIE_OPTIONS);
       res.status(200).json({
         message: "Session refreshed",
-        data: { uid: decoded.uid, email: decoded.email },
+        data: { uid: decoded.uid, email: decoded.email, role: user.role },
       });
     } catch (_error) {
       res.status(401).json({ message: "Invalid token" });
