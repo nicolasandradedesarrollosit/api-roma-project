@@ -47,6 +47,7 @@ export class AuthController {
       const dto = req.body as CreateSessionDto;
       const decoded = await authService.verifyFirebaseToken(dto.idToken);
       const user = await authService.findOrCreateByFirebase(decoded);
+      await authService.syncCustomClaims(decoded.uid, user.role);
       res.cookie("session", dto.idToken, SESSION_COOKIE_OPTIONS);
       res.status(200).json({
         message: "Session created",
@@ -65,6 +66,7 @@ export class AuthController {
       const dto = req.body as CreateSessionDto;
       const decoded = await authService.verifyFirebaseToken(dto.idToken);
       const user = await authService.findOrCreateByFirebase(decoded);
+      await authService.syncCustomClaims(decoded.uid, user.role);
       res.cookie("session", dto.idToken, SESSION_COOKIE_OPTIONS);
       res.status(200).json({
         message: "Session refreshed",

@@ -85,6 +85,14 @@ export class AuthService {
   }
 
   /**
+   * Sync user role to Firebase custom claims so the frontend can read
+   * the role directly from the ID token without an extra API round-trip.
+   */
+  async syncCustomClaims(uid: string, role: string): Promise<void> {
+    await admin.auth().setCustomUserClaims(uid, { role });
+  }
+
+  /**
    * Find or create a user from a decoded Firebase token.
    * If the user already exists but has empty names (race condition during
    * registration — onIdTokenChanged fires before updateProfile completes),
