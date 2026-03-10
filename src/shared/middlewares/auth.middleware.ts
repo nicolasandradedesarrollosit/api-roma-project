@@ -1,6 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 import { admin } from "../../config/firebase";
-import type { IAuthPayload } from "../types";
+import { AuthUser } from "../../modules/auth/auth.models";
+import { type IAuthPayload, UserRole } from "../types";
 
 declare global {
   namespace Express {
@@ -19,7 +20,10 @@ async function extractAndVerifyToken(req: Request): Promise<IAuthPayload | null>
   if (!token) return null;
 
   const decoded = await admin.auth().verifyIdToken(token);
-  return { userId: decoded.uid, email: decoded.email ?? "", role: "user" };
+  const dbUser = await AuthUser.findOne({ firebaseUid: decoded.uid });
+  const role = dbUser?.role ?? UserRole.USER;
+
+  return { firebaseUid: decoded.uid, email: decoded.email ?? "", role };
 }
 
 export const authMiddleware = async (
