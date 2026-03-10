@@ -1,6 +1,5 @@
 import { Router } from "express";
 import { validateDto } from "../../shared/middlewares";
-import { authMiddleware } from "../../shared/middlewares/auth.middleware";
 import { AuthController } from "./auth.controllers";
 import { AuthLoginDto, AuthRegisterDto, CreateSessionDto } from "./auth.dto";
 
@@ -34,6 +33,6 @@ authRouter.post("/session/refresh", validateDto(CreateSessionDto), AuthControlle
  * DELETE /api/v1/auth/session
  * Destroy session (clear cookie)
  */
-authRouter.delete("/session", authMiddleware, AuthController.destroySession);
+authRouter.delete("/session", AuthController.destroySession);
 
 export default authRouter;
